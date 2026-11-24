@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build:
+      context: ./services/auth_service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "8001:8001"
+    environment:
+      - JWT_SECRET=local-development-secret-key-12345
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  catalog-service:
+    build:
+      context: ./services/catalog_service
+      dockerfile: Dockerfile
+    container_name: catalog-service
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  order-service:
+    build:
+      context: ./services/order_service
+      dockerfile: Dockerfile
+    container_name: order-service
+    ports:
+      - "8003:8003"
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:8001
+      - CATALOG_SERVICE_URL=http://catalog-service:8002
+    depends_on:
+      - auth-service
+      - catalog-service
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8003/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  default:
+    name: platform-network
+

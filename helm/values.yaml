@@ -1,0 +1,35 @@
+replicaCount: 2
+
+image:
+  repository: cloud-platform
+  tag: latest
+  pullPolicy: IfNotPresent
+
+services:
+  auth:
+    name: auth-service
+    port: 8001
+    cpuLimit: 500m
+    memLimit: 256Mi
+  catalog:
+    name: catalog-service
+    port: 8002
+    cpuLimit: 500m
+    memLimit: 256Mi
+  order:
+    name: order-service
+    port: 8003
+    cpuLimit: 500m
+    memLimit: 256Mi
+
+ingress:
+  enabled: true
+  className: "nginx"
+  host: "api.cloudplatform.local"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75
+
