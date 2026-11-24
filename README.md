@@ -1,14 +1,5 @@
 # K8s Microservices Platform
 
-> **Introductory project overview**
->
-> This README explains the general concepts behind a microservices
-> platform running on Kubernetes. The original project archive
-> (`k8s-microservices-platform.rar`) could not be extracted in this
-> environment. Therefore, the architecture and technologies described
-> below are an introductory explanation based on the project name and
-> the earlier discussion, not a verified inventory of the repository.
-> Examples must be checked against the actual project files.
 
 ## 1. Project Overview
 
